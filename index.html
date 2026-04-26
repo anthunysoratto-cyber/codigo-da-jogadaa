@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Código da Jogada — Domine a Leitura Avançada</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+
+<script>
+/* ─── DEFAULTS ─────────────────────────────────────────────── */
+var CDJ_DEF = {
+  eyebrow:'🔥 Mais de 3.000 leitores transformados',
+  h1:'DOMINE A LEITURA.',h2:'ELEVE SEU CONHECIMENTO.',
+  hsub:'O único <strong>ebook de desenvolvimento pessoal</strong> que vai do básico ao nível especialista — com método comprovado, comunidade exclusiva e conteúdos semanais ao vivo.',
+  p1name:'Ebook Completo',p1desc:'Acesso total ao ebook de desenvolvimento pessoal. Do básico ao nível especialista.',p1price:'24',
+  p2name:'Módulo Essencial',p2desc:'Você escolhe os módulos que mais precisa agora. Flexível e acessível.',p2price:'14',
+  link1:'https://pay.cakto.com.br/knzs882_797210',link2:'https://pay.cakto.com.br/3ceaa9w_806547',
+  ytid:'YGUY0RPy0OA',pixel:'',pass:'admin123'
+};
+function loadCDJ(){
+  try{return Object.assign({},CDJ_DEF,JSON.parse(localStorage.getItem('cdj_v2')||'{}'));}catch(e){return Object.assign({},CDJ_DEF);}
+}
+function saveCDJ(d){localStorage.setItem('cdj_v2',JSON.stringify(d));}
+
+/* ─── UTM + CRAQUEADOR ─────────────────────────────────────── */
+(function(){
+  var p=new URLSearchParams(window.location.search);
+  var keys=['utm_source','utm_medium','utm_campaign','utm_term','utm_content','src','sck','ref','affiliate','fbclid','gclid','ttclid'];
+  var bag={};
+  keys.forEach(function(k){if(p.get(k))bag[k]=p.get(k);});
+  var prev=JSON.parse(sessionStorage.getItem('cdj_track')||'{}');
+  var merged=Object.assign({},prev,bag);
+  if(Object.keys(merged).length)sessionStorage.setItem('cdj_track',JSON.stringify(merged));
+  window._buildUrl=function(base){
+    var track=JSON.parse(sessionStorage.getItem('cdj_track')||'{}');
+    if(!Object.keys(track).length)return base;
+    try{var u=new URL(base);Object.entries(track).forEach(function(kv){u.searchParams.set(kv[0],kv[1]);});return u.toString();}
+    catch(e){return base;}
+  };
+})();
+
+/* ─── META PIXEL — inicialização dinâmica ──────────────────── */
+function initPixel(pid){
+  if(!pid||pid.length<8||window._pxOk)return;
+  window._pxOk=true;
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init',pid);fbq('track','PageView');
+  var ni=document.createElement('img');ni.height=1;ni.width=1;ni.style.display='none';
+  ni.src='https://www.facebook.com/tr?id='+pid+'&ev=PageView&noscript=1';
+  document.body.appendChild(ni);
+  window.addEventListener('load',function(){fbq('track','ViewContent',{content_name:'Codigo da Jogada',content_category:'Curso Esportivo'});});
+}
+
+/* ─── CHECKOUT ─────────────────────────────────────────────── */
+function goCheckout(plan){
+  var d=loadCDJ();
+  var url=plan==='pro'?(d.link1||CDJ_DEF.link1):(d.link2||CDJ_DEF.link2);
+  var price=plan==='pro'?parseFloat(d.p1price||'24'):parseFloat(d.p2price||'14');
+  var name=plan==='pro'?(d.p1name||'Book Completo'):(d.p2name||'Módulo Essencial');
+  if(typeof fbq!=='undefined'){fbq('track','AddToCart',{content_name:name,value:price,currency:'BRL'});fbq('track','InitiateCheckout',{content_name:name,value:price,currency:'BRL'});}
+  setTimeout(function(){window.location.href=window._buildUrl(url);},280);
+}
+
+/* ─── INIT ──────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',function(){
+  var d=loadCDJ();
+  if(d.pixel)initPixel(d.pixel);
+  applyContent(d);
+  setupVideo(d.ytid);
+});
+</script>
+
+<style>
+:root{--bg:#040810;--sf:#0b1220;--card:#111c30;--bdr:#1e2e48;--g:#00e676;--g2:#00c853;--y:#ffd600;--or:#ff6d00;--tx:#e8f0fe;--mu:#7a8fb5;--wh:#ffffff;--r:12px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.35}
+.container{max-width:960px;margin:0 auto;padding:0 22px}
+.tag{display:inline-block;background:rgba(0,230,118,.1);color:var(--g);border:1px solid rgba(0,230,118,.28);border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:.09em;padding:4px 14px;text-transform:uppercase}
+header{position:sticky;top:0;z-index:100;background:rgba(4,8,16,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);padding:13px 0}
+.hdr{display:flex;align-items:center;justify-content:space-between;max-width:960px;margin:0 auto;padding:0 22px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:.04em;color:var(--wh);cursor:default;user-select:none}
+.logo span{color:var(--g)}
+.hdr-cta{background:var(--g);color:#000;font-weight:800;font-size:.78rem;padding:9px 22px;border-radius:50px;border:none;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;font-family:'Barlow',sans-serif;transition:transform .15s,box-shadow .15s}
+.hdr-cta:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,230,118,.4)}
+#hero{position:relative;padding:68px 0 56px;text-align:center;overflow:hidden}
+.hbg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,230,118,.17) 0%,transparent 58%),radial-gradient(ellipse 50% 40% at 80% 85%,rgba(255,214,0,.07) 0%,transparent 50%)}
+.hgrid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(30,46,72,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(30,46,72,.35) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse 90% 65% at 50% 0%,black,transparent)}
+#hero .container{position:relative;z-index:1}
+.eyebrow{margin-bottom:18px}
+.hl{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,5.4rem);line-height:.94;letter-spacing:.02em;color:var(--wh);margin-bottom:10px}
+.hl .l2{color:var(--g);display:block}
+.hsub{font-size:clamp(.95rem,2.4vw,1.15rem);color:var(--mu);max-width:600px;margin:0 auto 34px;line-height:1.65}
+.hsub strong{color:var(--tx)}
+.vsl-wrap{position:relative;max-width:720px;margin:0 auto 38px;border-radius:16px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,230,118,.25),0 0 60px rgba(0,230,118,.18),0 30px 80px rgba(0,0,0,.65)}
+.vsl-badge{position:absolute;top:13px;left:13px;z-index:10;background:rgba(220,0,0,.9);color:#fff;font-weight:800;font-size:.68rem;padding:4px 10px;border-radius:4px;letter-spacing:.09em;text-transform:uppercase;pointer-events:none}
+.vsl-ratio{position:relative;width:100%;padding-top:56.25%;background:#000}
+.vsl-ratio iframe{position:absolute;inset:0;width:100%;height:100%;border:none;display:block}
+.ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.btn-p{background:linear-gradient(135deg,var(--g),var(--g2));color:#000;font-weight:900;font-size:.95rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;font-family:'Barlow',sans-serif;box-shadow:0 4px 28px rgba(0,230,118,.35);transition:transform .2s,box-shadow .2s}
+.btn-p:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 8px 40px rgba(0,230,118,.5)}
+.btn-s{background:transparent;border:2px solid var(--bdr);color:var(--tx);font-weight:700;font-size:.88rem;padding:14px 28px;border-radius:50px;cursor:pointer;font-family:'Barlow',sans-serif;text-transform:uppercase;letter-spacing:.05em;transition:border-color .2s,color .2s}
+.btn-s:hover{border-color:var(--g);color:var(--g)}
+.trust{display:flex;gap:26px;justify-content:center;flex-wrap:wrap}
+.ti{display:flex;align-items:center;gap:7px;font-size:.8rem;color:var(--mu)}
+section{padding:76px 0}
+.slabel{text-align:center;margin-bottom:14px}
+.stitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.1rem);text-align:center;line-height:1;margin-bottom:14px}
+.ssub{text-align:center;color:var(--mu);font-size:.95rem;max-width:580px;margin:0 auto 48px;line-height:1.65}
+.hl-g{color:var(--g)}.hl-y{color:var(--y)}
+#pain{background:var(--sf)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.pcard{background:rgba(255,109,0,.07);border:1px solid rgba(255,109,0,.2);border-radius:var(--r);padding:22px;display:flex;gap:14px;align-items:flex-start}
+.picon{width:40px;height:40px;flex-shrink:0;background:rgba(255,109,0,.14);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.pcard h3{font-size:.93rem;font-weight:700;margin-bottom:5px}
+.pcard p{font-size:.81rem;color:var(--mu);line-height:1.5}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px}
+.bcard{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:28px 22px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.bcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),transparent)}
+.bcard:hover{border-color:rgba(0,230,118,.4);transform:translateY(-2px)}
+.bnum{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;line-height:1;color:rgba(0,230,118,.14);margin-bottom:8px}
+.bcard h3{font-size:.97rem;font-weight:700;color:var(--wh);margin-bottom:7px}
+.bcard p{font-size:.83rem;color:var(--mu);line-height:1.55}
+#learn{background:var(--sf)}
+.mlist{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:11px;margin-bottom:38px}
+.mlist li{display:flex;align-items:flex-start;gap:11px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:13px 15px;font-size:.87rem;line-height:1.4}
+.chk{width:22px;height:22px;flex-shrink:0;background:rgba(0,230,118,.14);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--g);font-size:.72rem;font-weight:900}
+.pgcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(295px,1fr));gap:22px;max-width:750px;margin:0 auto}
+.plan{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:34px 26px;position:relative;transition:transform .2s}
+.plan:hover{transform:translateY(-3px)}
+.plan.feat{border-color:var(--g);box-shadow:0 0 40px rgba(0,230,118,.17)}
+.pbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--g);color:#000;font-weight:800;font-size:.68rem;padding:4px 18px;border-radius:50px;white-space:nowrap;letter-spacing:.07em;text-transform:uppercase}
+.pname{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:900;color:var(--wh);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.pdesc{font-size:.81rem;color:var(--mu);margin-bottom:18px;line-height:1.5}
+.pprice .from{font-size:.72rem;color:var(--mu);text-transform:uppercase;letter-spacing:.08em}
+.pprice .amt{font-family:'Bebas Neue',sans-serif;font-size:3.3rem;color:var(--wh);line-height:1}
+.plan.feat .pprice .amt{color:var(--g)}
+.pprice .cts{font-size:1.35rem;vertical-align:super;color:var(--mu)}
+.pprice .per{font-size:.72rem;color:var(--mu);margin-bottom:20px;display:block}
+.pfeats{list-style:none;margin-bottom:26px;display:flex;flex-direction:column;gap:9px}
+.pfeats li{display:flex;align-items:flex-start;gap:9px;font-size:.86rem;line-height:1.4}
+.fi{width:18px;height:18px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;margin-top:1px}
+.fi.y{background:rgba(0,230,118,.18);color:var(--g)}
+.fi.s{background:rgba(255,214,0,.18);color:var(--y)}
+.pbtn{display:block;text-align:center;width:100%;padding:15px;border-radius:50px;font-weight:900;font-size:.93rem;border:none;cursor:pointer;font-family:'Barlow',sans-serif;text-transform:uppercase;letter-spacing:.06em;transition:transform .15s,box-shadow .15s}
+.pbtn.pm{background:linear-gradient(135deg,var(--g),var(--g2));color:#000;box-shadow:0 4px 22px rgba(0,230,118,.3)}
+.pbtn.pm:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(0,230,118,.45)}
+.pbtn.po{background:transparent;border:2px solid var(--bdr);color:var(--tx)}
+.pbtn.po:hover{border-color:var(--y);color:var(--y)}
+.pguar{text-align:center;font-size:.73rem;color:var(--mu);margin-top:12px}
+.pguar span{color:var(--g)}
+#social{background:var(--sf)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:16px}
+.tc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:22px}
+.tstars{color:var(--y);font-size:.88rem;margin-bottom:9px;letter-spacing:2px}
+.ttxt{font-size:.87rem;line-height:1.65;color:var(--tx);margin-bottom:14px}
+.tau{display:flex;align-items:center;gap:11px}
+.tav{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--g2));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem;color:#000}
+.tname{font-weight:700;font-size:.84rem}
+.trole{font-size:.73rem;color:var(--mu)}
+.flist{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:9px}
+.fi2{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.fq{width:100%;text-align:left;background:none;border:none;color:var(--tx);cursor:pointer;padding:17px 20px;display:flex;justify-content:space-between;align-items:center;font-size:.93rem;font-weight:600;font-family:'Barlow',sans-serif;gap:12px}
+.farr{width:21px;height:21px;flex-shrink:0;background:rgba(0,230,118,.11);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;color:var(--g);transition:transform .25s}
+.fi2.open .farr{transform:rotate(180deg)}
+.fa{display:none;padding:0 20px 17px;font-size:.86rem;color:var(--mu);line-height:1.65}
+.fi2.open .fa{display:block}
+#cta-final{background:linear-gradient(135deg,rgba(0,230,118,.07) 0%,transparent 55%);border-top:1px solid var(--bdr);text-align:center}
+.ctitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,6vw,3.9rem);color:var(--wh);line-height:1;margin-bottom:14px}
+.urg{background:rgba(255,109,0,.11);border:1px solid rgba(255,109,0,.24);border-radius:var(--r);padding:11px 20px;display:inline-flex;align-items:center;gap:9px;font-size:.83rem;color:var(--or);font-weight:700;margin-bottom:30px}
+footer{background:var(--sf);border-top:1px solid var(--bdr);text-align:center;padding:28px 20px;font-size:.77rem;color:var(--mu);line-height:1.75}
+footer a{color:var(--mu);text-decoration:underline}
+#adm-ov{display:none;position:fixed;inset:0;z-index:9200;background:rgba(0,0,0,.83);backdrop-filter:blur(7px);overflow-y:auto}
+#adm-panel{background:var(--sf);border:1px solid var(--bdr);border-radius:20px;max-width:760px;margin:36px auto;padding:36px}
+#adm-panel h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;margin-bottom:5px;color:var(--wh)}
+.adm-intro{font-size:.81rem;color:var(--mu);margin-bottom:26px}
+.as{margin-bottom:26px}
+.as h3{font-size:.86rem;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.09em;margin-bottom:13px;padding-bottom:6px;border-bottom:1px solid var(--bdr)}
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:.76rem;color:var(--mu);margin-bottom:5px;font-weight:600}
+.fg input,.fg textarea{width:100%;background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:10px 13px;color:var(--tx);font-family:'Barlow',sans-serif;font-size:.86rem;outline:none;transition:border-color .2s}
+.fg input:focus,.fg textarea:focus{border-color:var(--g)}
+.fg textarea{min-height:72px;resize:vertical}
+.ar{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.abtns{display:flex;gap:11px;flex-wrap:wrap;margin-top:18px}
+.abtn{padding:11px 22px;border-radius:50px;font-weight:800;font-size:.8rem;cursor:pointer;border:none;font-family:'Barlow',sans-serif;text-transform:uppercase;letter-spacing:.06em;transition:transform .15s}
+.abtn:hover{transform:translateY(-1px)}
+.abtn.sv{background:var(--g);color:#000}
+.abtn.cl{background:var(--card);color:var(--tx);border:1px solid var(--bdr)}
+.abtn.rs{background:rgba(255,0,0,.14);color:#ff5252;border:1px solid rgba(255,0,0,.24)}
+#adm-login{text-align:center;padding:56px 20px}
+#adm-login h3{font-family:'Bebas Neue',sans-serif;font-size:2rem;margin-bottom:18px}
+#adm-login input{max-width:280px;width:100%;background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:11px 16px;color:var(--tx);font-family:'Barlow',sans-serif;font-size:.93rem;outline:none;margin:0 auto 13px;display:block}
+#adm-login button{padding:11px 30px;background:var(--g);color:#000;font-weight:800;border:none;border-radius:50px;cursor:pointer;font-family:'Barlow',sans-serif;font-size:.88rem}
+#adm-perr{color:#ff5252;font-size:.77rem;margin-top:9px;display:none}
+.an{background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.2);border-radius:8px;padding:11px 15px;font-size:.79rem;color:var(--mu);margin-bottom:18px}
+.an strong{color:var(--g)}
+.px-dot{display:inline-flex;align-items:center;gap:6px;font-size:.76rem;margin-top:6px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot.on{background:var(--g)}.dot.off{background:#ff5252}
+@media(max-width:600px){.ar{grid-template-columns:1fr}.pgcards{grid-template-columns:1fr}.ctas,.trust{flex-direction:column;align-items:center}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr">
+    <div class="logo" id="logo-secret">CÓDIGO<span>DA</span>JOGADA</div>
+    <button class="hdr-cta" onclick="goCheckout('pro')">Garantir Acesso →</button>
+  </div>
+</header>
+<section id="hero">
+  <div class="hbg"></div><div class="hgrid"></div>
+  <div class="container">
+    <div class="eyebrow"><span class="tag" id="txt-eyebrow">🔥 Mais de 3.000 apostadores transformados</span></div>
+    <h1 class="hl">
+      <span id="txt-h1">PARE DE PERDER.</span>
+      <span class="l2" id="txt-h2">COMECE A LUCRAR.</span>
+    </h1>
+    <p class="hsub" id="txt-hsub">O único <strong>book de análise esportiva</strong> que vai do básico ao nível especialista — com método comprovado, comunidade exclusiva e análises semanais ao vivo.</p>
+    <div class="vsl-wrap">
+      <span class="vsl-badge">▶ ASSISTA AGORA</span>
+      <div class="vsl-ratio" id="vsl-box"></div>
+    </div>
+    <div class="ctas">
+      <button class="btn-p" onclick="goCheckout('pro')">🏆 BOOK COMPLETO — R$<span class="p1p">24</span>,90</button>
+      <button class="btn-s" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Ver todos os planos</button>
+    </div>
+    <div class="trust">
+      <div class="ti"><svg width="15" height="15" fill="none" stroke="#00e676" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compra segura</div>
+      <div class="ti"><svg width="15" height="15" fill="none" stroke="#00e676" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Acesso imediato</div>
+      <div class="ti"><svg width="15" height="15" fill="none" stroke="#00e676" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Garantia 7 dias</div>
+    </div>
+  </div>
+</section>
+<section id="pain">
+  <div class="container">
+    <div class="slabel"><span class="tag">❌ Reconhece esse cenário?</span></div>
+    <h2 class="stitle">Você ainda <span class="hl-y">lê superficialmente?</span></h2>
+    <p class="ssub">Milhares de pessoas desperdiçam tempo com leituras rasas.</p>
+    <div class="pgrid">
+      <div class="pcard"><div class="picon">😤</div><div><h3>Leituras sem foco</h3><p>Você lê livros aleatoriamente sem um método, terminando sem aplicar nada na prática.</p></div></div>
+      <div class="pcard"><div class="picon">📊</div><div><h3>Falta de compreensão</h3><p>Não consegue reter informações importantes, esquecendo o essencial logo após ler.</p></div></div>
+      <div class="pcard"><div class="picon">💸</div><div><h3>Tempo perdido</h3><p>Gasta horas lendo sem ver resultados concretos na sua vida pessoal ou profissional.</p></div></div>
+      <div class="pcard"><div class="picon">🔍</div><div><h3>Análise rasa</h3><p>Lê apenas a superfície, ignorando insights profundos que poderiam transformar sua mentalidade.</p></div></div>
+    </div>
+  </div>
+</section>
+<section id="benefits">
+  <div class="container">
+    <div class="slabel"><span class="tag">✅ O que muda com o método</span></div>
+    <h2 class="stitle">Do básico ao <span class="hl-g">nível especialista</span></h2>
+    <p class="ssub">Um sistema completo. Você aprende do zero e avança até dominar as técnicas mais avançadas de leitura e desenvolvimento pessoal.</p>
+    <div class="bgrid">
+      <div class="bcard"><div class="bnum">01</div><h3>Fundamentos Sólidos</h3><p>Entenda como a leitura transforma mentes, como absorver conhecimento e como aplicar na prática.</p></div>
+      <div class="bcard"><div class="bnum">02</div><h3>Técnicas de Leitura</h3><p>Aprenda métodos avançados de leitura, anotações inteligentes e retenção de informações.</p></div>
+      <div class="bcard"><div class="bnum">03</div><h3>Desenvolvimento Pessoal</h3><p>Método profissional para crescimento pessoal, com hábitos diários e metas claras.</p></div>
+      <div class="bcard"><div class="bnum">04</div><h3>Conteúdos Semanais</h3><p>Artigos e vídeos semanais sobre temas relevantes. Veja aplicações práticas em tempo real.</p></div>
+      <div class="bcard"><div class="bnum">05</div><h3>Comunidade Exclusiva</h3><p>Grupo privado com leitores sérios, troca de ideias, suporte diário e networking de qualidade.</p></div>
+      <div class="bcard"><div class="bnum">06</div><h3>Certificado de Conclusão</h3><p>Ao completar o programa, você recebe seu certificado oficial de domínio da leitura avançada.</p></div>
+    </div>
+  </div>
+</section>
+<section id="learn">
+  <div class="container">
+    <div class="slabel"><span class="tag">📚 O que você vai aprender</span></div>
+    <h2 class="stitle">Conteúdo <span class="hl-g">completo e direto</span></h2>
+    <p class="ssub">Cada módulo foi criado para entregar resultado prático. Sem enrolação.</p>
+    <ul class="mlist">
+      <li><span class="chk">✓</span>Mindset de leitor avançado: como pensar como um especialista em conhecimento</li>
+      <li><span class="chk">✓</span>Psicologia da leitura: como o cérebro processa informação e como otimizar</li>
+      <li><span class="chk">✓</span>Técnicas de leitura: skimming, scanning, leitura profunda e ativa</li>
+      <li><span class="chk">✓</span>Como reter informações: métodos de memorização e revisão</li>
+      <li><span class="chk">✓</span>Fatores críticos: ambiente, horário, motivação e consistência</li>
+      <li><span class="chk">✓</span>Análise de livros completa: checklist passo a passo</li>
+      <li><span class="chk">✓</span>Planejamento de leitura avançada com planilha exclusiva</li>
+      <li><span class="chk">✓</span>Como encontrar valor em livros e explorar ideias profundas</li>
+      <li><span class="chk">✓</span>Estratégias de longo prazo para crescer intelectualmente com consistência</li>
+      <li><span class="chk">✓</span>Leitura crítica: como identificar vieses e argumentos fracos</li>
+      <li><span class="chk">✓</span>Construção de biblioteca pessoal e métricas de progresso</li>
+      <li><span class="chk">✓</span>Módulo especialista: análise de obras clássicas e literatura contemporânea</li>
+    </ul>
+    <div style="text-align:center"><button class="btn-p" onclick="goCheckout('pro')">🚀 QUERO APRENDER TUDO — R$<span class="p1p">24</span>,90</button></div>
+  </div>
+</section>
+<section id="pricing" style="background:var(--sf)">
+  <div class="container">
+    <div class="slabel"><span class="tag">💳 Escolha seu plano</span></div>
+    <h2 class="stitle">Acesso <span class="hl-g">sem mistério</span></h2>
+    <p class="ssub">Dois planos. Você escolhe o que faz mais sentido para onde está agora.</p>
+    <div class="pgcards">
+      <div class="plan">
+        <div class="pname" id="txt-p2name">Módulo Essencial</div>
+        <p class="pdesc" id="txt-p2desc">Você escolhe os módulos que mais precisa agora. Flexível e acessível.</p>
+        <div class="pprice">
+          <div class="from">apenas</div>
+          <div class="amt">R$<span class="p2p">14</span><span class="cts">,90</span></div>
+          <span class="per">pagamento único</span>
+        </div>
+        <ul class="pfeats">
+          <li><span class="fi s">★</span>Você escolhe os módulos</li>
+          <li><span class="fi s">★</span>Conteúdo sob medida</li>
+          <li><span class="fi s">★</span>Acesso imediato ao escolhido</li>
+          <li><span class="fi s">★</span>Material de apoio incluso</li>
+        </ul>
+        <button class="pbtn po" onclick="goCheckout('essencial')">QUERO ESCOLHER OS MÓDULOS</button>
+        <p class="pguar">Você define o que vem <span>✓</span></p>
+      </div>
+      <div class="plan feat">
+        <div class="pbadge">🏆 MAIS POPULAR</div>
+        <div class="pname" id="txt-p1name">Ebook Completo</div>
+        <p class="pdesc" id="txt-p1desc">Acesso total ao ebook de desenvolvimento pessoal. Do básico ao nível especialista.</p>
+        <div class="pprice">
+          <div class="from">apenas</div>
+          <div class="amt">R$<span class="p1p">24</span><span class="cts">,90</span></div>
+          <span class="per">pagamento único</span>
+        </div>
+        <ul class="pfeats">
+          <li><span class="fi y">✓</span>Do básico ao especialista</li>
+          <li><span class="fi y">✓</span>Conteúdos semanais ao vivo</li>
+          <li><span class="fi y">✓</span>Comunidade exclusiva</li>
+          <li><span class="fi y">✓</span>Certificado de conclusão</li>
+          <li><span class="fi y">✓</span>Planilha de planejamento</li>
+          <li><span class="fi y">✓</span>Atualizações vitalícias</li>
+        </ul>
+        <button class="pbtn pm" onclick="goCheckout('pro')">GARANTIR AGORA — R$<span class="p1p">24</span>,90</button>
+        <p class="pguar">Garantia de 7 dias <span>✓</span> Compra segura</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="social">
+  <div class="container">
+    <div class="slabel"><span class="tag">💬 Resultados reais de alunos</span></div>
+    <h2 class="stitle">O método <span class="hl-g">funciona de verdade</span></h2>
+    <p class="ssub">Veja o que nossos alunos dizem depois de aplicar o Código da Jogada.</p>
+    <div class="tgrid">
+      <div class="tc"><div class="tstars">★★★★★</div><p class="ttxt">"Eu lia livros há anos mas nunca aplicava. Com o Código da Jogada aprendi técnicas de leitura e hoje tenho uma biblioteca pessoal organizada. Melhor investimento que fiz!"</p><div class="tau"><div class="tav">LM</div><div><div class="tname">Lucas M.</div><div class="trole">Leitor desde Jan/2025</div></div></div></div>
+      <div class="tc"><div class="tstars">★★★★★</div><p class="ttxt">"Os conteúdos semanais são incríveis. Ver aplicações práticas em vídeos ao vivo mudou minha forma de ler. Em 3 meses já li mais livros do que no ano passado."</p><div class="tau"><div class="tav">RS</div><div><div class="tname">Rafael S.</div><div class="trole">Leitor desde Fev/2025</div></div></div></div>
+      <div class="tc"><div class="tstars">★★★★★</div><p class="ttxt">"A comunidade exclusiva vale mais do que o ebook. A troca de ideias e o suporte são sensacionais. Você nunca fica sozinho para discutir um livro."</p><div class="tau"><div class="tav">AC</div><div><div class="tname">Amanda C.</div><div class="trole">Leitora desde Mar/2025</div></div></div></div>
+    </div>
+  </div>
+</section>
+<section id="faq" style="background:var(--sf)">
+  <div class="container">
+    <div class="slabel"><span class="tag">❓ Dúvidas frequentes</span></div>
+    <h2 class="stitle">Respostas <span class="hl-g">sem enrolação</span></h2>
+    <p class="ssub">Tudo que você precisa saber antes de garantir seu acesso.</p>
+    <div class="flist">
+      <div class="fi2"><button class="fq" onclick="tglFaq(this)">Para quem é o Código da Jogada?<span class="farr">▼</span></button><div class="fa">Para qualquer pessoa que quer aprender leitura avançada com método — seja iniciante absoluto ou alguém que já lê mas não tem profundidade. O conteúdo vai do básico ao especialista.</div></div>
+      <div class="fi2"><button class="fq" onclick="tglFaq(this)">Preciso ter experiência com leitura para começar?<span class="farr">▼</span></button><div class="fa">Não. Os primeiros módulos constroem toda a base necessária. Você vai entender como o cérebro processa informação, conceitos simples de psicologia da leitura e como construir o hábito certo desde o início.</div></div>
+      <div class="fi2"><button class="fq" onclick="tglFaq(this)">Qual a diferença entre o Ebook Completo e o Módulo Essencial?<span class="farr">▼</span></button><div class="fa">O Ebook Completo (R$24,90) dá acesso a tudo: todos os módulos, conteúdos semanais ao vivo, comunidade exclusiva e certificado. O Módulo Essencial (R$14,90) é para quem quer escolher módulos específicos com foco no que mais precisa agora.</div></div>
+      <div class="fi2"><button class="fq" onclick="tglFaq(this)">Quando terei acesso após a compra?<span class="farr">▼</span></button><div class="fa">Imediatamente! Assim que o pagamento for confirmado você recebe o acesso por e-mail. Pode começar na hora.</div></div>
+      <div class="fi2"><button class="fq" onclick="tglFaq(this)">E se eu não gostar? Tem garantia?<span class="farr">▼</span></button><div class="fa">Sim! Você tem 7 dias de garantia incondicional. Se por qualquer motivo não ficar satisfeito, é só entrar em contato e devolvemos 100% do seu dinheiro — sem perguntas.</div></div>
+      <div class="fi2"><button class="fq" onclick="tglFaq(this)">Os conteúdos semanais ficam gravados?<span class="farr">▼</span></button><div class="fa">Sim. Todas as análises semanais ficam gravadas e disponíveis na plataforma. Você pode assistir quando quiser, quantas vezes quiser.</div></div>
+      <div class="fi2"><button class="fq" onclick="tglFaq(this)">Como funciona a comunidade exclusiva?<span class="farr">▼</span></button><div class="fa">Você entra no grupo privado com centenas de leitores sérios. Lá tem suporte, troca de ideias, debates sobre livros e interação direta com os mentores.</div></div>
+    </div>
+  </div>
+</section>
+<section id="cta-final">
+  <div class="container">
+    <div class="urg">⚡ Oferta por tempo limitado — preço pode aumentar a qualquer momento</div>
+    <h2 class="ctitle">Sua <span class="hl-g">decisão</span> mais<br>fácil da semana.</h2>
+    <p class="ssub" style="margin-bottom:34px">Por menos de R$25 você acessa tudo que precisa para nunca mais apostar no escuro. <strong>Garantia de 7 dias.</strong></p>
+    <div class="ctas">
+      <button class="btn-p" style="font-size:1.05rem;padding:17px 42px" onclick="goCheckout('pro')">🏆 BOOK COMPLETO — R$<span class="p1p">24</span>,90</button>
+      <button class="btn-s" onclick="goCheckout('essencial')">Módulo Essencial — R$<span class="p2p">14</span>,90</button>
+    </div>
+    <p style="margin-top:18px;font-size:.77rem;color:var(--mu)">🔒 Pagamento 100% seguro · 🚀 Acesso imediato · ↩ Garantia de 7 dias</p>
+  </div>
+</section>
+<footer>
+  <div class="logo" style="margin-bottom:9px">CÓDIGO<span style="color:var(--g)">DA</span>JOGADA</div>
+  <p>© 2025 Código da Jogada. Todos os direitos reservados.</p>
+  <p style="margin-top:5px"><a href="#">Política de Privacidade</a> · <a href="#">Termos de Uso</a> · <a href="#">Suporte</a></p>
+  <p style="margin-top:11px;font-size:.71rem;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6">A leitura avançada envolve compromisso. Este material é educativo. Os resultados individuais variam e não constituem garantia de sucesso. Leia com responsabilidade.</p>
+</footer>
+<div id="adm-ov">
+  <div id="adm-panel">
+    <div id="adm-login">
+      <h3>🔐 Painel Admin</h3>
+      <p style="font-size:.82rem;color:var(--mu);margin-bottom:18px">Senha para editar o site</p>
+      <input type="password" id="adm-pw" placeholder="Senha..." onkeydown="if(event.key==='Enter')chkPass()">
+      <button onclick="chkPass()">Entrar</button>
+      <p id="adm-perr">Senha incorreta</p>
+      <p style="margin-top:18px;font-size:.71rem;color:var(--mu)">Padrão: <strong style="color:var(--g)">admin123</strong></p>
+    </div>
+    <div id="adm-editor" style="display:none">
+      <h2>⚙ Painel de Edição</h2>
+      <p class="adm-intro">Edite textos, preços, Pixel e links. Clique Salvar para aplicar.</p>
+      <div class="as">
+        <h3>📡 Meta Pixel</h3>
+        <div class="an"><strong>Como ativar:</strong> Cole apenas o ID numérico do seu Pixel Meta abaixo. O pixel será inicializado automaticamente e vai disparar PageView, ViewContent, AddToCart e InitiateCheckout em todas as visitas.</div>
+        <div class="fg">
+          <label>ID do Pixel Meta (apenas números)</label>
+          <input type="text" id="e-pixel" placeholder="Ex: 1234567890123456">
+          <div id="px-status" class="px-dot"></div>
+        </div>
+      </div>
+      <div class="as">
+        <h3>🦸 Hero</h3>
+        <div class="fg"><label>Tag de destaque</label><input type="text" id="e-eyebrow"></div>
+        <div class="ar">
+          <div class="fg"><label>Linha 1 do título</label><input type="text" id="e-h1"></div>
+          <div class="fg"><label>Linha 2 (verde)</label><input type="text" id="e-h2"></div>
+        </div>
+        <div class="fg"><label>Subtítulo (aceita HTML básico)</label><textarea id="e-hsub"></textarea></div>
+      </div>
+      <div class="as">
+        <h3>💰 Planos e Preços</h3>
+        <div class="ar">
+          <div class="fg"><label>Nome Plano Completo</label><input type="text" id="e-p1name"></div>
+          <div class="fg"><label>Preço Plano Completo (R$XX)</label><input type="text" id="e-p1price" placeholder="24"></div>
+        </div>
+        <div class="fg"><label>Descrição Plano Completo</label><textarea id="e-p1desc"></textarea></div>
+        <div class="ar">
+          <div class="fg"><label>Nome Módulo Essencial</label><input type="text" id="e-p2name"></div>
+          <div class="fg"><label>Preço Módulo Essencial (R$XX)</label><input type="text" id="e-p2price" placeholder="14"></div>
+        </div>
+        <div class="fg"><label>Descrição Módulo Essencial</label><textarea id="e-p2desc"></textarea></div>
+      </div>
+      <div class="as">
+        <h3>🔗 Links de Checkout (Cakto)</h3>
+        <div class="an"><strong>UTM & Craqueador:</strong> Os parâmetros <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, <code>src</code>, <code>sck</code>, <code>fbclid</code>, <code>gclid</code> e outros são capturados automaticamente da URL de entrada e repassados ao checkout.</div>
+        <div class="fg"><label>Link Book Completo (R$24,90)</label><input type="text" id="e-link1"></div>
+        <div class="fg"><label>Link Módulo Essencial (R$14,90)</label><input type="text" id="e-link2"></div>
+      </div>
+      <div class="as">
+        <h3>🎬 Vídeo VSL</h3>
+        <div class="fg"><label>ID do vídeo no YouTube (parte após v= ou /)</label><input type="text" id="e-yt" placeholder="Ex: dQw4w9WgXcQ"></div>
+      </div>
+      <div class="as">
+        <h3>🔐 Alterar Senha</h3>
+        <div class="ar">
+          <div class="fg"><label>Nova senha</label><input type="password" id="e-np" placeholder="Nova senha..."></div>
+          <div class="fg"><label>Confirmar senha</label><input type="password" id="e-cp" placeholder="Confirmar..."></div>
+        </div>
+      </div>
+      <div class="abtns">
+        <button class="abtn sv" onclick="saveAdm()">💾 Salvar Alterações</button>
+        <button class="abtn cl" onclick="closeAdm()">✕ Fechar</button>
+        <button class="abtn rs" onclick="resetAdm()">🔄 Restaurar Padrão</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function tglFaq(btn){
+  var item=btn.parentElement,was=item.classList.contains('open');
+  document.querySelectorAll('.fi2.open').forEach(function(i){i.classList.remove('open');});
+  if(!was)item.classList.add('open');
+}
+
+function setupVideo(ytid){
+  var box=document.getElementById('vsl-box');
+  if(!box)return;
+  var id=(ytid||'YGUY0RPy0OA').trim();
+  box.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1"'+
+    ' title="Código da Jogada — VSL"'+
+    ' frameborder="0"'+
+    ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"'+
+    ' allowfullscreen'+
+    ' style="position:absolute;inset:0;width:100%;height:100%;border:none;display:block">'+
+    '</iframe>';
+}
+
+function applyContent(d){
+  function st(id,v){var e=document.getElementById(id);if(e&&v!==undefined)e.textContent=v;}
+  function sh(id,v){var e=document.getElementById(id);if(e&&v!==undefined)e.innerHTML=v;}
+  st('txt-eyebrow',d.eyebrow);st('txt-h1',d.h1);st('txt-h2',d.h2);sh('txt-hsub',d.hsub);
+  st('txt-p1name',d.p1name);st('txt-p1desc',d.p1desc);
+  st('txt-p2name',d.p2name);st('txt-p2desc',d.p2desc);
+  document.querySelectorAll('.p1p').forEach(function(el){el.textContent=d.p1price||'24';});
+  document.querySelectorAll('.p2p').forEach(function(el){el.textContent=d.p2price||'14';});
+}
+
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
+},{threshold:.1});
+document.querySelectorAll('.bcard,.pcard,.tc,.plan').forEach(function(el){
+  el.style.opacity='0';el.style.transform='translateY(22px)';
+  el.style.transition='opacity .5s ease,transform .5s ease';obs.observe(el);
+});
+
+var _lc=0,_lt;
+document.getElementById('logo-secret').addEventListener('click',function(){
+  _lc++;clearTimeout(_lt);
+  _lt=setTimeout(function(){_lc=0;},2200);
+  if(_lc>=5){_lc=0;openAdm();}
+});
+
+function openAdm(){
+  document.getElementById('adm-ov').style.display='block';
+  document.body.style.overflow='hidden';
+  var d=loadCDJ();
+  function fv(id,v){var e=document.getElementById(id);if(e)e.value=v||'';}
+  fv('e-eyebrow',d.eyebrow);fv('e-h1',d.h1);fv('e-h2',d.h2);fv('e-hsub',d.hsub);
+  fv('e-p1name',d.p1name);fv('e-p1desc',d.p1desc);fv('e-p1price',d.p1price);
+  fv('e-p2name',d.p2name);fv('e-p2desc',d.p2desc);fv('e-p2price',d.p2price);
+  fv('e-link1',d.link1||CDJ_DEF.link1);fv('e-link2',d.link2||CDJ_DEF.link2);
+  fv('e-yt',d.ytid);fv('e-pixel',d.pixel);
+  var s=document.getElementById('px-status');
+  if(s)s.innerHTML=d.pixel&&d.pixel.length>=8
+    ?'<span class="dot on"></span> Pixel ativo: '+d.pixel
+    :'<span class="dot off"></span> Pixel não configurado';
+}
+
+function chkPass(){
+  var d=loadCDJ();
+  if(document.getElementById('adm-pw').value===(d.pass||'admin123')){
+    document.getElementById('adm-login').style.display='none';
+    document.getElementById('adm-editor').style.display='block';
+    document.getElementById('adm-perr').style.display='none';
+  }else{document.getElementById('adm-perr').style.display='block';}
+}
+
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function saveAdm(){
+  var d=loadCDJ(),np=gv('e-np'),cp=gv('e-cp');
+  if(np&&np!==cp){alert('❌ As senhas não coincidem.');return;}
+  var s={
+    eyebrow:gv('e-eyebrow')||d.eyebrow,h1:gv('e-h1')||d.h1,h2:gv('e-h2')||d.h2,hsub:gv('e-hsub')||d.hsub,
+    p1name:gv('e-p1name')||d.p1name,p1desc:gv('e-p1desc')||d.p1desc,p1price:gv('e-p1price')||d.p1price,
+    p2name:gv('e-p2name')||d.p2name,p2desc:gv('e-p2desc')||d.p2desc,p2price:gv('e-p2price')||d.p2price,
+    link1:gv('e-link1')||CDJ_DEF.link1,link2:gv('e-link2')||CDJ_DEF.link2,
+    ytid:gv('e-yt')||d.ytid,pixel:gv('e-pixel'),
+    pass:(np&&np===cp)?np:(d.pass||'admin123')
+  };
+  saveCDJ(s);applyContent(s);setupVideo(s.ytid);
+  if(s.pixel&&s.pixel.length>=8&&!window._pxOk)initPixel(s.pixel);
+  alert('✅ Salvo com sucesso!');closeAdm();
+}
+
+function closeAdm(){
+  document.getElementById('adm-ov').style.display='none';
+  document.body.style.overflow='';
+  document.getElementById('adm-login').style.display='block';
+  document.getElementById('adm-editor').style.display='none';
+  document.getElementById('adm-pw').value='';
+}
+
+function resetAdm(){
+  if(!confirm('Restaurar textos padrão? Links, pixel e senha mantidos.'))return;
+  var d=loadCDJ();
+  var r=Object.assign({},CDJ_DEF,{link1:d.link1||CDJ_DEF.link1,link2:d.link2||CDJ_DEF.link2,pixel:d.pixel,pass:d.pass||'admin123'});
+  saveCDJ(r);applyContent(r);setupVideo(r.ytid);openAdm();
+}
+
+document.getElementById('adm-ov').addEventListener('click',function(e){if(e.target===this)closeAdm();});
+</script>
+</body>
+</html>
